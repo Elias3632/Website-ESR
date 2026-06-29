@@ -1398,6 +1398,9 @@ p {
   grid-column: auto;
   aspect-ratio: 16 / 10;
 }
+.work-grid--equal .work-card--portrait:first-child {
+  aspect-ratio: 9 / 16;
+}
 
 /* ===========================
    Photo Grid
