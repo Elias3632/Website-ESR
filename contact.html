@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt — ESR Studio</title>
+  <meta name="description" content="Nimm Kontakt mit ESR Studio auf. Lass uns Visuals mit Intention erschaffen.">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+
+      <a href="index.html" class="nav__logo-link" aria-label="ESR Studio — Startseite">
+        <img class="logo"
+             src="Brand_assets/Kopie%20von%20ESR%20studio%20(1).png"
+             alt="ESR Studio"
+             height="72">
+      </a>
+
+      <ul class="nav__links" role="list">
+        <li><a href="index.html"   class="nav__link">Start</a></li>
+        <li><a href="work.html"    class="nav__link">Projekte</a></li>
+        <li><a href="about.html"   class="nav__link">Über mich</a></li>
+        <li><a href="contact.html" class="nav__link active">Kontakt</a></li>
+      </ul>
+
+      <a href="contact.html" class="nav__cta">Anfragen</a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="nav__mobile" id="mobileMenu" role="dialog" aria-label="Navigation">
+    <button class="nav__mobile-close" id="mobileClose" aria-label="Menü schließen">&#x2715;</button>
+    <a href="index.html"   class="nav__mobile-link">Start</a>
+    <a href="work.html"    class="nav__mobile-link">Projekte</a>
+    <a href="about.html"   class="nav__mobile-link">Über mich</a>
+    <a href="contact.html" class="nav__mobile-link">Kontakt</a>
+  </div>
+
+  <main>
+
+    <!-- Page Hero -->
+    <header class="page-hero">
+      <div class="page-hero__grain" aria-hidden="true"></div>
+      <div class="container">
+        <div class="page-hero__content">
+          <div class="section-label section-label--gold hero-enter hero-enter-d1">
+            <span class="gold-dot"></span> Kontakt
+          </div>
+          <h1 class="hero-enter hero-enter-d2">
+            Lass uns Visuals<br>mit Intention erschaffen.
+          </h1>
+          <p class="hero-enter hero-enter-d3">
+            Erzähl mir von deinem Projekt. Ich melde mich innerhalb von 1–2
+            Werktagen mit einer kurzen Einschätzung und den nächsten Schritten.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="section contact-section">
+      <div class="container">
+        <div class="contact-grid">
+
+          <!-- Left: Info -->
+          <div class="contact-info reveal">
+            <div class="contact-info__head">
+              <div class="section-label">
+                <span class="gold-dot"></span> Schreib mir
+              </div>
+            </div>
+
+            <h2>Starten wir das<br>Gespräch.</h2>
+
+            <p>
+              Ich arbeite mit einer überschaubaren Anzahl an Kunden gleichzeitig,
+              damit jedes Projekt von Anfang bis Ende fokussierte Aufmerksamkeit bekommt.
+              Ob du bereits ein Brief hast, eine Idee entwickeln möchtest oder einfach
+              mal reden willst, hier ist der richtige Ort.
+            </p>
+
+            <div class="contact-details">
+
+              <div class="contact-detail">
+                <span class="contact-detail__label">
+                  <span class="gold-dot"></span>
+                  E-Mail
+                </span>
+                <a href="mailto:info@esrstudio.de" class="contact-detail__value">
+                  info@esrstudio.de
+                </a>
+              </div>
+
+              <div class="contact-detail">
+                <span class="contact-detail__label">
+                  <span class="gold-dot"></span>
+                  Antwortzeit
+                </span>
+                <span class="contact-detail__value">Innerhalb von 1–2 Werktagen</span>
+              </div>
+
+              <div class="contact-detail">
+                <span class="contact-detail__label">
+                  <span class="gold-dot"></span>
+                  Standort
+                </span>
+                <span class="contact-detail__value">Deutschland — weltweit verfügbar</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Right: Form -->
+          <div class="contact-form-wrap reveal reveal-d2" id="contactFormWrap">
+            <h3>Nachricht senden.</h3>
+
+            <form id="contactForm" action="https://formspree.io/f/DEINE_FORM_ID" method="POST" novalidate>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Dein Name"
+                    required
+                    autocomplete="name">
+                </div>
+                <div class="form-group">
+                  <label for="email">E-Mail</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="deine@email.de"
+                    required
+                    autocomplete="email">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="company">Unternehmen</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  placeholder="Unternehmen oder Markenname"
+                  autocomplete="organization">
+              </div>
+
+              <div class="form-group">
+                <label for="message">Nachricht</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Erzähl mir von deinem Projekt – was du brauchst, wann es fertig sein soll und was uns helfen würde, dein Brief zu verstehen."
+                  required></textarea>
+              </div>
+
+              <div class="form-submit">
+                <button type="submit" class="btn--form">
+                  Nachricht senden
+                  <span class="gold-dot"></span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Strip -->
+    <section class="section cta-banner" style="padding: 80px 0;">
+      <div class="container">
+        <h2 class="reveal" style="font-size: clamp(1.5rem, 3vw, 2.25rem);">
+          Nicht sicher, wie du anfangen sollst?
+        </h2>
+        <p class="reveal reveal-d1">
+          Buche ein 20-minütiges Kennenlerngespräch. Kein Pitch, kein Druck,
+          nur ein Gespräch darüber, was du aufbaust.
+        </p>
+        <a href="mailto:info@esrstudio.de" class="btn btn--outline reveal reveal-d2">
+          Gespräch buchen <span class="gold-dot"></span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div>
+          <img class="footer__brand-logo"
+               src="Brand_assets/ESR%20studio%20(2).png"
+               alt="ESR Studio">
+          <p class="footer__tagline">Content, filmisch produziert.</p>
+          <a href="https://www.instagram.com/esr_visuals/" target="_blank" rel="noopener noreferrer" class="footer__instagram" aria-label="ESR Studio auf Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Instagram
+          </a>
+        </div>
+        <nav class="footer__nav" aria-label="Footer-Links">
+          <a href="index.html"   class="footer__nav-link">Start</a>
+          <a href="work.html"    class="footer__nav-link">Projekte</a>
+          <a href="about.html"   class="footer__nav-link">Über mich</a>
+          <a href="contact.html" class="footer__nav-link">Kontakt</a>
+        </nav>
+      </div>
+      <div class="footer__divider"></div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2025 ESR Studio. Alle Rechte vorbehalten.</p>
+        <div class="footer__legal">
+          <a href="impressum.html" class="footer__nav-link">Impressum</a>
+          <a href="datenschutz.html" class="footer__nav-link">Datenschutz</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
