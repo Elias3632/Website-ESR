@@ -682,10 +682,14 @@ p {
   pointer-events: none;
 }
 
-.work-card__video--short iframe {
+.work-card--portrait {
+  aspect-ratio: 9 / 16;
+}
+
+.work-card--portrait .work-card__video iframe {
   width: 100%;
   height: 100%;
-  transform: translate(-50%, -50%) scale(3.2);
+  transform: translate(-50%, -50%);
 }
 
 .work-card__placeholder-bg {
