@@ -1566,21 +1566,28 @@ p {
   /* Portrait video cards: shorter when stacked single-column */
   .work-card--portrait { aspect-ratio: 4 / 5; }
 
-  /* Scroll-activated video card — mimics hover state */
-  .work-card--active .work-card__video { transform: scale(1.04); }
+  /* Scroll-activated video card */
+  .work-card { transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
+  .work-card--active {
+    transform: scale(1.04);
+    z-index: 2;
+    box-shadow: 0 0 0 2px rgba(201,168,76,.55), 0 16px 48px rgba(0,0,0,.55);
+  }
+  .work-card--active .work-card__video { transform: scale(1.06); }
   .work-card--active .work-card__overlay {
-    background: linear-gradient(to top, rgba(13,36,26,.96) 0%, rgba(13,36,26,.3) 60%, transparent 100%);
+    background: linear-gradient(to top, rgba(13,36,26,.9) 0%, rgba(13,36,26,.2) 55%, transparent 100%);
   }
 
   /* Photo overlays always visible — no hover on touch devices */
   .photo-card__overlay { opacity: 1; }
 
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
-  .work-grid .work-card:first-child,
-  .work-grid--full .work-card:first-child {
+  .work-grid .work-card:not(.work-card--portrait):first-child,
+  .work-grid--full .work-card:not(.work-card--portrait):first-child {
     grid-column: auto;
     aspect-ratio: 16 / 9;
   }
+  .work-grid--equal .work-card--portrait:first-child { aspect-ratio: 4 / 5; }
   .work-grid--full { grid-template-columns: 1fr; }
   .work-card__desc { display: none !important; }
   .work-card__overlay { padding: 22px; }

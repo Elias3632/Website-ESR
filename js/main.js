@@ -122,21 +122,25 @@ function initWorkVideos() {
   } else {
     // Touch: the card with the highest intersection ratio plays exclusively
     const ratios = new Map(cards.map(c => [c, 0]));
+    let syncTimer = null;
 
     function syncActive() {
-      let best = null, bestR = 0;
-      ratios.forEach((r, c) => { if (r > bestR) { bestR = r; best = c; } });
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => {
+        let best = null, bestR = 0;
+        ratios.forEach((r, c) => { if (r > bestR) { bestR = r; best = c; } });
 
-      cards.forEach(card => {
-        const video = card.querySelector('video');
-        const active = card === best && bestR > 0.15;
-        card.classList.toggle('work-card--active', active);
-        if (active) { if (video.paused) video.play().catch(() => {}); }
-        else        { if (!video.paused) video.pause(); }
-      });
+        cards.forEach(card => {
+          const video = card.querySelector('video');
+          const active = card === best && bestR > 0.35;
+          card.classList.toggle('work-card--active', active);
+          if (active) { if (video.paused) video.play().catch(() => {}); }
+          else        { if (!video.paused) video.pause(); }
+        });
+      }, 180);
     }
 
-    const thresholds = Array.from({ length: 11 }, (_, i) => i / 10);
+    const thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => ratios.set(e.target, e.intersectionRatio));
       syncActive();
