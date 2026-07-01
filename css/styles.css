@@ -1566,6 +1566,12 @@ p {
   /* Portrait video cards: shorter when stacked single-column */
   .work-card--portrait { aspect-ratio: 4 / 5; }
 
+  /* Scroll-activated video card — mimics hover state */
+  .work-card--active .work-card__video { transform: scale(1.04); }
+  .work-card--active .work-card__overlay {
+    background: linear-gradient(to top, rgba(13,36,26,.96) 0%, rgba(13,36,26,.3) 60%, transparent 100%);
+  }
+
   /* Photo overlays always visible — no hover on touch devices */
   .photo-card__overlay { opacity: 1; }
 

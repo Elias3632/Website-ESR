@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   setActiveNavLink();
   initContactForm();
+  initWorkVideos();
 });
 
 // ===========================
@@ -100,6 +101,49 @@ function setActiveNavLink() {
       link.classList.remove('active');
     }
   });
+}
+
+// ===========================
+// Work Page Videos
+// ===========================
+function initWorkVideos() {
+  const cards = [...document.querySelectorAll('.work-card')].filter(c => c.querySelector('video'));
+  if (!cards.length) return;
+
+  const isTouch = window.matchMedia('(hover: none)').matches;
+
+  if (!isTouch) {
+    // Desktop: play on hover, pause+reset on leave
+    cards.forEach(card => {
+      const video = card.querySelector('video');
+      card.addEventListener('mouseenter', () => video.play().catch(() => {}));
+      card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+    });
+  } else {
+    // Touch: the card with the highest intersection ratio plays exclusively
+    const ratios = new Map(cards.map(c => [c, 0]));
+
+    function syncActive() {
+      let best = null, bestR = 0;
+      ratios.forEach((r, c) => { if (r > bestR) { bestR = r; best = c; } });
+
+      cards.forEach(card => {
+        const video = card.querySelector('video');
+        const active = card === best && bestR > 0.15;
+        card.classList.toggle('work-card--active', active);
+        if (active) { if (video.paused) video.play().catch(() => {}); }
+        else        { if (!video.paused) video.pause(); }
+      });
+    }
+
+    const thresholds = Array.from({ length: 11 }, (_, i) => i / 10);
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => ratios.set(e.target, e.intersectionRatio));
+      syncActive();
+    }, { threshold: thresholds });
+
+    cards.forEach(c => io.observe(c));
+  }
 }
 
 // ===========================
