@@ -112,9 +112,27 @@ function initWorkVideos() {
 
   const isTouch = window.matchMedia('(hover: none)').matches;
 
+  function loadSrc(video) {
+    const source = video.querySelector('source[data-src]');
+    if (!source) return;
+    source.src = source.dataset.src;
+    source.removeAttribute('data-src');
+    video.load();
+  }
+
   if (!isTouch) {
-    // Desktop: play on hover, pause+reset on leave
+    // Desktop: preload src when card nears viewport, play on hover
+    const viewIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          loadSrc(e.target.querySelector('video'));
+          viewIO.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '300px' });
+
     cards.forEach(card => {
+      viewIO.observe(card);
       const video = card.querySelector('video');
       card.addEventListener('mouseenter', () => video.play().catch(() => {}));
       card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
@@ -132,10 +150,16 @@ function initWorkVideos() {
 
         cards.forEach(card => {
           const video = card.querySelector('video');
+          const ratio = ratios.get(card);
+          // Pre-buffer as soon as card starts entering viewport
+          if (ratio > 0.1) loadSrc(video);
           const active = card === best && bestR > 0.35;
           card.classList.toggle('work-card--active', active);
-          if (active) { if (video.paused) video.play().catch(() => {}); }
-          else        { if (!video.paused) video.pause(); }
+          if (active) {
+            if (video.paused) video.play().catch(() => {});
+          } else {
+            if (!video.paused) video.pause();
+          }
         });
       }, 180);
     }
