@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontakt — ESR Studio</title>
-  <meta name="description" content="Nimm Kontakt mit ESR Studio auf. Lass uns Visuals mit Intention erschaffen.">
+  <title>Kontakt | Videoproduktion Böblingen & Stuttgart | ESR Studio</title>
+  <meta name="description" content="Videoproduktion anfragen – ESR Studio aus Schönaich, tätig im Raum Böblingen, Sindelfingen und Stuttgart. Jetzt Kontakt aufnehmen und Projekt starten.">
+  <link rel="canonical" href="https://esrstudio.de/contact.html">
+  <meta property="og:title" content="Kontakt | Videoproduktion Böblingen & Stuttgart | ESR Studio">
+  <meta property="og:description" content="Videoproduktion anfragen – ESR Studio aus Schönaich, tätig im Raum Böblingen, Sindelfingen und Stuttgart.">
+  <meta property="og:site_name" content="ESR Studio">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://esrstudio.de/contact.html">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -113,7 +119,7 @@
                   <span class="gold-dot"></span>
                   Standort
                 </span>
-                <span class="contact-detail__value">Deutschland — weltweit verfügbar</span>
+                <span class="contact-detail__value">Schönaich · Böblingen · Sindelfingen · Stuttgart</span>
               </div>
 
             </div>
@@ -123,7 +129,19 @@
           <div class="contact-form-wrap reveal reveal-d2" id="contactFormWrap">
             <h3>Nachricht senden.</h3>
 
-            <form id="contactForm" action="https://formspree.io/f/DEINE_FORM_ID" method="POST" novalidate>
+            <div data-fs-success style="display:none">
+              <div class="form-success">
+                <div class="form-success__icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3>Nachricht erhalten.</h3>
+                <p>Ich melde mich innerhalb von 1–2 Werktagen bei dir.</p>
+              </div>
+            </div>
+
+            <div data-fs-error style="display:none" class="form-error-global"></div>
+
+            <form id="contactForm" action="https://formspree.io/f/xojzoave" method="POST" novalidate>
 
               <div class="form-row">
                 <div class="form-group">
@@ -134,7 +152,9 @@
                     name="name"
                     placeholder="Dein Name"
                     required
-                    autocomplete="name">
+                    autocomplete="name"
+                    data-fs-field>
+                  <span data-fs-error="name" class="form-field-error"></span>
                 </div>
                 <div class="form-group">
                   <label for="email">E-Mail</label>
@@ -144,7 +164,9 @@
                     name="email"
                     placeholder="deine@email.de"
                     required
-                    autocomplete="email">
+                    autocomplete="email"
+                    data-fs-field>
+                  <span data-fs-error="email" class="form-field-error"></span>
                 </div>
               </div>
 
@@ -155,7 +177,8 @@
                   id="company"
                   name="company"
                   placeholder="Unternehmen oder Markenname"
-                  autocomplete="organization">
+                  autocomplete="organization"
+                  data-fs-field>
               </div>
 
               <div class="form-group">
@@ -164,11 +187,13 @@
                   id="message"
                   name="message"
                   placeholder="Erzähl mir von deinem Projekt – was du brauchst, wann es fertig sein soll und was uns helfen würde, dein Brief zu verstehen."
-                  required></textarea>
+                  required
+                  data-fs-field></textarea>
+                <span data-fs-error="message" class="form-field-error"></span>
               </div>
 
               <div class="form-submit">
-                <button type="submit" class="btn--form">
+                <button type="submit" class="btn--form" data-fs-submit-btn>
                   Nachricht senden
                   <span class="gold-dot"></span>
                 </button>
@@ -222,7 +247,7 @@
       </div>
       <div class="footer__divider"></div>
       <div class="footer__bottom">
-        <p class="footer__copy">&copy; 2025 ESR Studio. Alle Rechte vorbehalten.</p>
+        <p class="footer__copy">&copy; 2026 ESR Studio. Alle Rechte vorbehalten.</p>
         <div class="footer__legal">
           <a href="impressum.html" class="footer__nav-link">Impressum</a>
           <a href="datenschutz.html" class="footer__nav-link">Datenschutz</a>
@@ -232,5 +257,10 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+    formspree('initForm', { formElement: '#contactForm', formId: 'xojzoave' });
+  </script>
+  <script src="js/formspree-ajax.min.js" defer></script>
 </body>
 </html>
