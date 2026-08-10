@@ -51,6 +51,8 @@
     }
   }
   </script>
+  <link rel="preload" as="font" href="fonts/space-grotesk-latin.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" href="Brand_assets/Kopie%20von%20ESR%20studio%20(1).avif">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -64,7 +66,9 @@
         <img class="logo"
              src="Brand_assets/Kopie%20von%20ESR%20studio%20(1).avif"
              alt="ESR Studio"
-             height="72">
+             height="72"
+             fetchpriority="high"
+             decoding="async">
       </a>
 
       <ul class="nav__links" role="list">
@@ -96,7 +100,7 @@
     <!-- ==================== HERO ==================== -->
     <section class="hero" id="hero">
       <div class="hero__video" aria-hidden="true">
-        <video autoplay muted loop playsinline><source src="Video/AG1.mp4" type="video/mp4"></video>
+        <video id="heroVideo" muted loop playsinline preload="none"><source data-src="Video/AG1.mp4" type="video/mp4"></video>
       </div>
       <div class="hero__grain" aria-hidden="true"></div>
       <div class="hero__glow"  aria-hidden="true"></div>
@@ -184,7 +188,7 @@
         <div class="work-grid">
 
           <div class="work-card reveal">
-            <img src="Pictures/DSC08660.avif" alt="Porsche Cockpit" class="work-card__img">
+            <img src="Pictures/DSC08660.avif" alt="Porsche Cockpit" class="work-card__img" loading="lazy" decoding="async">
             <div class="work-card__overlay">
               <div class="work-card__cat">Automotive</div>
               <div class="work-card__title">Porsche — Cockpit</div>
@@ -197,7 +201,7 @@
           </div>
 
           <div class="work-card reveal reveal-d1">
-            <img src="Pictures/DSC01174.avif" alt="Eventfotografie" class="work-card__img">
+            <img src="Pictures/DSC01174.avif" alt="Eventfotografie" class="work-card__img" loading="lazy" decoding="async">
             <div class="work-card__overlay">
               <div class="work-card__cat">Event</div>
               <div class="work-card__title">Eventfotografie</div>
@@ -210,7 +214,7 @@
           </div>
 
           <div class="work-card reveal reveal-d2">
-            <img src="Pictures/DSC09881.avif" alt="Immobilienfotografie Kamin" class="work-card__img">
+            <img src="Pictures/DSC09881.avif" alt="Immobilienfotografie Kamin" class="work-card__img" loading="lazy" decoding="async">
             <div class="work-card__overlay">
               <div class="work-card__cat">Immobilien</div>
               <div class="work-card__title">Villa Ettlingen — Kamin</div>

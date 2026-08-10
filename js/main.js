@@ -11,6 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initWorkVideos();
 });
 
+// Hero video loads after all critical resources to not block page render
+window.addEventListener('load', initHeroVideo);
+
+function initHeroVideo() {
+  const video = document.getElementById('heroVideo');
+  if (!video) return;
+  const source = video.querySelector('source[data-src]');
+  if (!source) return;
+  source.src = source.dataset.src;
+  source.removeAttribute('data-src');
+  video.load();
+  video.play().catch(() => {});
+}
+
 // ===========================
 // Navigation
 // ===========================
