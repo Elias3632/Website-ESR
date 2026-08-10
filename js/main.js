@@ -153,6 +153,12 @@ function initWorkVideos() {
       preloadIO.observe(card);
       const video = card.querySelector('video');
 
+      // Inject visible play button
+      const playBtn = document.createElement('div');
+      playBtn.className = 'work-card__play-touch';
+      playBtn.innerHTML = `<svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2L20 13L2 24V2Z" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+      card.appendChild(playBtn);
+
       card.addEventListener('click', () => {
         const wasPlaying = !video.paused;
 
