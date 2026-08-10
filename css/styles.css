@@ -716,6 +716,34 @@ p {
   transform: scale(1.08);
 }
 
+/* Touch play button — injected by JS on touch devices, visible on all screen sizes */
+.work-card__play-touch {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(13,36,26,.45);
+  border: 2px solid rgba(201,168,76,.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+  transition: opacity .35s, transform .35s;
+  animation: tap-pulse 2.4s ease-in-out infinite;
+}
+@keyframes tap-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,.45); }
+  55%       { box-shadow: 0 0 0 14px rgba(201,168,76,0); }
+}
+.work-card--active .work-card__play-touch {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.8);
+}
+
 .work-card__overlay {
   position: absolute;
   inset: 0;
@@ -1566,34 +1594,7 @@ p {
   /* Portrait video cards: shorter when stacked single-column */
   .work-card--portrait { aspect-ratio: 4 / 5; }
 
-  /* Tap-to-play video cards on touch */
-  .work-card { transition: transform .4s var(--ease), box-shadow .4s var(--ease); cursor: pointer; }
-  .work-card__play-touch {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    background: rgba(13,36,26,.45);
-    border: 2px solid rgba(201,168,76,.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 4;
-    pointer-events: none;
-    transition: opacity .35s, transform .35s;
-    animation: tap-pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes tap-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,.45); }
-    55%       { box-shadow: 0 0 0 14px rgba(201,168,76,0); }
-  }
-  .work-card--active .work-card__play-touch {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.8);
-  }
+  /* Tap-to-play: active card state on touch */
   .work-card--active {
     transform: scale(1.04);
     z-index: 2;
