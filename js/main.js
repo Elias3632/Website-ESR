@@ -110,7 +110,8 @@ function initWorkVideos() {
   const cards = [...document.querySelectorAll('.work-card')].filter(c => c.querySelector('video'));
   if (!cards.length) return;
 
-  const isTouch = window.matchMedia('(hover: none)').matches;
+  const isTouch = window.matchMedia('(hover: none)').matches ||
+    (navigator.maxTouchPoints > 1 && window.matchMedia('(pointer: coarse)').matches);
 
   function loadSrc(video) {
     const source = video.querySelector('source[data-src]');
