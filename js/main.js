@@ -139,39 +139,35 @@ function initWorkVideos() {
       card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
     });
   } else {
-    // Touch: the card with the highest intersection ratio plays exclusively
-    const ratios = new Map(cards.map(c => [c, 0]));
-    let syncTimer = null;
+    // Touch: tap to play/pause. Tapping a card pauses all others.
+    const preloadIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          loadSrc(e.target.querySelector('video'));
+          preloadIO.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '300px' });
 
-    function syncActive() {
-      clearTimeout(syncTimer);
-      syncTimer = setTimeout(() => {
-        let best = null, bestR = 0;
-        ratios.forEach((r, c) => { if (r > bestR) { bestR = r; best = c; } });
+    cards.forEach(card => {
+      preloadIO.observe(card);
+      const video = card.querySelector('video');
 
-        cards.forEach(card => {
-          const video = card.querySelector('video');
-          const ratio = ratios.get(card);
-          // Pre-buffer as soon as card starts entering viewport
-          if (ratio > 0.1) loadSrc(video);
-          const active = card === best && bestR > 0.35;
-          card.classList.toggle('work-card--active', active);
-          if (active) {
-            if (video.paused) video.play().catch(() => {});
-          } else {
-            if (!video.paused) video.pause();
-          }
+      card.addEventListener('click', () => {
+        const wasPlaying = !video.paused;
+
+        cards.forEach(c => {
+          c.querySelector('video').pause();
+          c.classList.remove('work-card--active');
         });
-      }, 180);
-    }
 
-    const thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => ratios.set(e.target, e.intersectionRatio));
-      syncActive();
-    }, { threshold: thresholds });
-
-    cards.forEach(c => io.observe(c));
+        if (!wasPlaying) {
+          loadSrc(video);
+          video.play().catch(() => {});
+          card.classList.add('work-card--active');
+        }
+      });
+    });
   }
 }
 
