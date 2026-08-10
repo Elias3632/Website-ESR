@@ -3,4 +3,4 @@ Allow: /
 Disallow: /datenschutz.html
 Disallow: /impressum.html
 
-Sitemap: https://esrstudio.de/sitemap.xml
+Sitemap: https://esr-studio.de/sitemap.xml
