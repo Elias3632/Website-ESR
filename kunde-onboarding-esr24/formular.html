@@ -210,13 +210,15 @@
   #success{
     display:none;
     text-align:center;
-    padding:100px 24px;
+    padding:120px 24px 80px;
+    min-height:60vh;
   }
-  #success .rec-dot{margin:0 auto 22px; width:10px; height:10px;}
+  #success .rec-dot{margin:0 auto 24px; width:10px; height:10px;}
   #success h2{
     font-family:'Bebas Neue',sans-serif;
-    font-size:34px;
-    margin:0 0 14px;
+    font-size:40px;
+    margin:0 0 16px;
+    color:var(--ivory);
   }
   #success p{
     color:rgba(247,244,236,0.72);
@@ -445,6 +447,7 @@
         document.querySelector('.wrap').style.display = 'none';
         document.querySelector('header.hero').style.display = 'none';
         success.style.display = 'block';
+        window.scrollTo(0, 0);
       } else {
         const data = await response.json().catch(function(){ return {}; });
         console.error('Formspree error', response.status, data);
