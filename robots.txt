@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /datenschutz.html
 Disallow: /impressum.html
+Disallow: /kunde-onboarding-esr24/
 
 Sitemap: https://esr-studio.de/sitemap.xml

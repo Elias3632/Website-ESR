@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partnerzugriff einrichten — ESR Studio</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark-green:#1A3A2A;
+    --deep-pine:#0D241A;
+    --gold:#C9A84C;
+    --gold-soft:#C9A96E;
+    --ivory:#F7F4EC;
+    --line:rgba(247,244,236,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--deep-pine);
+    color:var(--ivory);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--gold);}
+
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 24px 90px;
+  }
+
+  header.hero{
+    position:relative;
+    padding:64px 24px 48px;
+    background:var(--dark-green);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:640px;
+    margin:0 auto;
+    position:relative;
+  }
+  .rec{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    letter-spacing:0.14em;
+    color:var(--gold-soft);
+    margin-bottom:18px;
+  }
+  .rec-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#D8543F;
+    box-shadow:0 0 0 3px rgba(216,84,63,0.18);
+  }
+  h1{
+    font-family:'Bebas Neue',sans-serif;
+    font-weight:400;
+    font-size:46px;
+    line-height:1.0;
+    letter-spacing:0.01em;
+    margin:0 0 14px;
+    color:var(--ivory);
+  }
+  .hero p{
+    font-size:15.5px;
+    line-height:1.6;
+    color:rgba(247,244,236,0.78);
+    margin:0;
+    max-width:48ch;
+  }
+
+  .vf{position:absolute; width:22px; height:22px; border-color:var(--gold); opacity:0.85;}
+  .vf.tl{top:22px; left:22px; border-top:2px solid; border-left:2px solid;}
+  .vf.br{bottom:22px; right:22px; border-bottom:2px solid; border-right:2px solid;}
+
+  /* ID CALLOUT */
+  .id-callout{
+    margin:36px 0 0;
+    padding:18px 20px;
+    background:rgba(201,168,76,0.08);
+    border:1px solid rgba(201,168,76,0.35);
+    border-radius:2px;
+  }
+  .id-callout .label{
+    font-size:11.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:6px;
+  }
+  .id-callout .value{
+    font-family:'Inter',sans-serif;
+    font-size:22px;
+    font-weight:700;
+    color:var(--ivory);
+    letter-spacing:0.02em;
+    user-select:all;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .copy-btn{
+    background:var(--gold);
+    color:var(--deep-pine);
+    border:none;
+    border-radius:2px;
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:8px 14px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background 0.15s ease;
+  }
+  .copy-btn:hover{background:var(--gold-soft);}
+  .copy-btn.copied{background:#7FAE8C; color:var(--deep-pine);}
+
+  /* STEPS */
+  .steps{padding:44px 0 8px;}
+  .step{
+    display:flex;
+    gap:18px;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .step:last-child{border-bottom:none;}
+  .step-num{
+    flex:0 0 auto;
+    width:34px;
+    height:34px;
+    border:1px solid var(--gold);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:16px;
+    color:var(--gold);
+  }
+  .step-body h3{
+    font-family:'Bebas Neue',sans-serif;
+    font-weight:400;
+    font-size:19px;
+    letter-spacing:0.01em;
+    margin:2px 0 8px;
+    color:var(--ivory);
+  }
+  .step-body p{
+    font-size:14.5px;
+    line-height:1.65;
+    color:rgba(247,244,236,0.75);
+    margin:0;
+  }
+  .step-body .step-id{
+    display:inline-block;
+    margin-top:10px;
+    font-weight:700;
+    color:var(--gold-soft);
+    background:rgba(201,168,76,0.1);
+    padding:3px 9px;
+    border-radius:2px;
+    font-size:14px;
+  }
+
+  .note{
+    margin-top:40px;
+    padding:18px 20px;
+    border-left:2px solid var(--gold);
+    background:rgba(247,244,236,0.03);
+    font-size:13.5px;
+    line-height:1.6;
+    color:rgba(247,244,236,0.72);
+  }
+  .note strong{color:var(--ivory);}
+
+  .cta-row{
+    margin-top:40px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    display:inline-block;
+    background:var(--gold);
+    color:var(--deep-pine);
+    font-family:'Bebas Neue',sans-serif;
+    font-size:16px;
+    letter-spacing:0.03em;
+    text-decoration:none;
+    padding:13px 22px;
+    border-radius:2px;
+    transition:background 0.15s ease;
+  }
+  .btn-primary:hover{background:var(--gold-soft);}
+  .btn-secondary{
+    display:inline-block;
+    color:rgba(247,244,236,0.75);
+    font-size:13.5px;
+    text-decoration:none;
+    padding:13px 6px;
+    border-bottom:1px solid rgba(247,244,236,0.3);
+  }
+  .btn-secondary:hover{color:var(--ivory); border-color:var(--ivory);}
+
+  footer{
+    text-align:center;
+    padding:36px 24px 0;
+    font-size:12px;
+    color:rgba(247,244,236,0.4);
+  }
+
+  @media (max-width:480px){
+    h1{font-size:36px;}
+    header.hero{padding:48px 20px 36px;}
+    .id-callout .value{font-size:18px; flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="vf tl"></span>
+  <span class="vf br"></span>
+  <div class="hero-inner">
+    <div class="rec"><span class="rec-dot"></span>ANLEITUNG</div>
+    <h1>Partnerzugriff<br>einrichten.</h1>
+    <p>So geben Sie ESR Studio sicheren Zugriff auf Ihren Instagram Account — ohne Ihr Passwort zu teilen. Dauert etwa 2 Minuten.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="id-callout">
+    <div class="label">Partner Business ID von ESR Studio</div>
+    <div class="value">
+      <span id="partner-id">251646013975804</span>
+      <button class="copy-btn" id="copy-btn" type="button">Kopieren</button>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Business Suite öffnen</h3>
+        <p>Auf <a href="https://business.facebook.com" target="_blank" rel="noopener">business.facebook.com</a> einloggen — mit dem Account, der Ihren Instagram Account oder Ihre Facebook Page verwaltet.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Geschäftseinstellungen öffnen</h3>
+        <p>Unten links auf das Zahnrad Symbol klicken, dann auf „Geschäftseinstellungen".</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Partner Bereich öffnen</h3>
+        <p>Im linken Menü unter „Nutzer" auf „Partner" klicken.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Zugriff gestatten auswählen</h3>
+        <p>Auf „Partner hinzufügen" klicken, dann die Option <strong>„Einem Partner Zugriff auf deine Assets gestatten"</strong> wählen — nicht die zweite Option.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Assets auswählen</h3>
+        <p>Den Instagram Account (und ggf. die Facebook Page) auswählen, die freigegeben werden sollen.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h3>ESR Partner ID eingeben</h3>
+        <p>Die Partner Business ID von ESR Studio eintragen (oben zum Kopieren):</p>
+        <span class="step-id">251646013975804</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <h3>Rolle festlegen und bestätigen</h3>
+        <p>Berechtigung „Content erstellen" auswählen — das reicht für Postings und Reels. Mit „Einladen" bestätigen.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <strong>Wichtig:</strong> Ihr Passwort wird zu keinem Zeitpunkt benötigt. Sie können den Zugriff jederzeit selbst in der Business Suite wieder entziehen.
+  </div>
+
+  <div class="cta-row">
+    <a href="/kunde-onboarding-esr24/formular.html" class="btn-primary">Zurück zum Onboarding Formular</a>
+    <a href="mailto:info@esrstudio.de" class="btn-secondary">Fragen? Direkt schreiben</a>
+  </div>
+
+</div>
+
+<footer>ESR Studio — Video Content, der Ihre Zielgruppe erreicht</footer>
+
+<script>
+  const copyBtn = document.getElementById('copy-btn');
+  const partnerId = document.getElementById('partner-id').textContent.trim();
+  copyBtn.addEventListener('click', async function(){
+    try {
+      await navigator.clipboard.writeText(partnerId);
+      copyBtn.textContent = 'Kopiert';
+      copyBtn.classList.add('copied');
+      setTimeout(function(){
+        copyBtn.textContent = 'Kopieren';
+        copyBtn.classList.remove('copied');
+      }, 2000);
+    } catch (err) {
+      copyBtn.textContent = 'Fehler';
+    }
+  });
+</script>
+
+</body>
+</html>
