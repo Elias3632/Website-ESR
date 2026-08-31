@@ -135,6 +135,46 @@ function initWorkVideos() {
     video.load();
   }
 
+  const iconMuted = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 5L6 9H2v6h4l5 4V5Z" fill="white"/>
+    <line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+  const iconUnmuted = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 5L6 9H2v6h4l5 4V5Z" fill="white"/>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+
+  function addSoundButton(card, video) {
+    const btn = document.createElement('button');
+    btn.className = 'work-card__sound-btn';
+    btn.setAttribute('aria-label', 'Ton ein/aus');
+    btn.innerHTML = iconMuted;
+
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (video.muted) {
+        // Mute all other videos and unmute this one
+        cards.forEach(c => {
+          const v = c.querySelector('video');
+          if (c !== card) {
+            v.muted = true;
+            const b = c.querySelector('.work-card__sound-btn');
+            if (b) b.innerHTML = iconMuted;
+          }
+        });
+        video.muted = false;
+        btn.innerHTML = iconUnmuted;
+      } else {
+        video.muted = true;
+        btn.innerHTML = iconMuted;
+      }
+    });
+
+    card.appendChild(btn);
+  }
+
   if (!isTouch) {
     // Desktop: preload src when card nears viewport, play on hover
     const viewIO = new IntersectionObserver(entries => {
@@ -149,6 +189,7 @@ function initWorkVideos() {
     cards.forEach(card => {
       viewIO.observe(card);
       const video = card.querySelector('video');
+      addSoundButton(card, video);
       card.addEventListener('mouseenter', () => video.play().catch(() => {}));
       card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
     });
@@ -166,6 +207,7 @@ function initWorkVideos() {
     cards.forEach(card => {
       preloadIO.observe(card);
       const video = card.querySelector('video');
+      addSoundButton(card, video);
 
       // Inject visible play button
       const playBtn = document.createElement('div');

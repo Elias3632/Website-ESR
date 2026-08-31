@@ -743,6 +743,35 @@ p {
   opacity: 0;
   transform: translate(-50%, -50%) scale(.8);
 }
+.work-card__sound-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(13,36,26,.55);
+  border: 1.5px solid rgba(201,168,76,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .25s, background .2s;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 0;
+  outline: none;
+}
+.work-card:hover .work-card__sound-btn,
+.work-card--active .work-card__sound-btn {
+  opacity: 1;
+}
+.work-card__sound-btn:hover {
+  background: rgba(13,36,26,.8);
+}
+.work-card__sound-btn svg { display: block; }
 
 .work-card__overlay {
   position: absolute;
@@ -1445,6 +1474,29 @@ p {
 .work-grid--equal .work-card--portrait:first-child {
   aspect-ratio: 9 / 16;
 }
+/* Full-width card inside equal grid */
+.work-card--wide {
+  grid-column: 1 / -1;
+  aspect-ratio: 21 / 9;
+}
+
+/* Portrait-row grid: alle 4 Videos nebeneinander in 9:16 */
+.work-grid--portrait-row {
+  grid-template-columns: repeat(4, 1fr);
+}
+/* Cancel the "first card spans full width" rule from base .work-grid */
+.work-grid--portrait-row .work-card:first-child {
+  grid-column: auto;
+  aspect-ratio: 9 / 16;
+}
+.work-grid--portrait-row .work-card--portrait {
+  aspect-ratio: 9 / 16;
+}
+
+/* Stack grids with minimal gap */
+.work-grid + .work-grid {
+  margin-top: 3px;
+}
 
 /* ===========================
    Photo Grid
@@ -1567,6 +1619,11 @@ p {
 
   /* Process grid 2-col on iPad to avoid cramping at mid-range widths */
   .process-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* iPad: Portrait-Videos 2×2, kompakteres Format */
+  .work-grid--portrait-row { grid-template-columns: repeat(2, 1fr); }
+  .work-grid--portrait-row .work-card:first-child,
+  .work-grid--portrait-row .work-card--portrait { aspect-ratio: 4 / 5; }
 }
 
 @media (max-width: 768px) {
@@ -1590,8 +1647,12 @@ p {
   .hero__sub { margin-bottom: 36px; }
 
   .work-grid { grid-template-columns: 1fr; }
+  .work-grid--portrait-row { grid-template-columns: repeat(2, 1fr); }
+  .work-grid--portrait-row .work-card:first-child,
+  .work-grid--portrait-row .work-card--portrait { aspect-ratio: 4 / 5; }
+  .work-card--wide { aspect-ratio: 16 / 9; }
 
-  /* Portrait video cards: shorter when stacked single-column */
+  /* Portrait video cards outside portrait-row: shorter when stacked */
   .work-card--portrait { aspect-ratio: 4 / 5; }
 
   /* Tap-to-play: active card state on touch */
@@ -1665,6 +1726,11 @@ p {
   .hero__content { padding-top: 16px; }
   .work-card__overlay { padding: 16px; }
   .photo-grid { grid-template-columns: 1fr; }
+
+  /* Kleines Handy: Portrait-Videos einspaltig */
+  .work-grid--portrait-row { grid-template-columns: 1fr; }
+  .work-grid--portrait-row .work-card:first-child,
+  .work-grid--portrait-row .work-card--portrait { aspect-ratio: 4 / 5; }
 
   /* Even smaller logo on very small phones */
   .nav__logo-link { height: 40px; }
