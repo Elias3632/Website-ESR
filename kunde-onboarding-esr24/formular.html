@@ -217,11 +217,11 @@
     line-height:1.5;
   }
   .status-msg.error{
-    display:block;
     background:rgba(216,84,63,0.12);
     border:1px solid rgba(216,84,63,0.4);
     color:#E8A79A;
   }
+  .status-msg.visible{display:block;}
 
   /* SUCCESS STATE */
   #success{
@@ -422,7 +422,7 @@
   <div class="submit-wrap">
     <button type="submit" id="submit-btn">Formular absenden</button>
     <div class="privacy-note">Ihre Angaben werden ausschließlich zur Vorbereitung der Zusammenarbeit mit ESR Studio genutzt und nicht an Dritte weitergegeben.</div>
-    <div class="status-msg error" id="error-msg">Beim Senden ist etwas schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie direkt an <a href="mailto:info@esrstudio.de">info@esrstudio.de</a>.</div>
+    <div class="status-msg error" id="error-msg" style="display:none;">Beim Senden ist etwas schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie direkt an <a href="mailto:info@esrstudio.de">info@esrstudio.de</a>.</div>
   </div>
 
 </form>
@@ -506,9 +506,12 @@
         document.querySelector('header.hero').style.display = 'none';
         success.style.display = 'block';
       } else {
-        throw new Error('Submit failed');
+        const data = await response.json().catch(function(){ return {}; });
+        console.error('Formspree error', response.status, data);
+        throw new Error('Submit failed: ' + response.status);
       }
     } catch (err) {
+      console.error('Form submission error:', err);
       errorMsg.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Formular absenden';
