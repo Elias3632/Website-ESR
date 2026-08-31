@@ -168,6 +168,8 @@
   .file-field input[type=file]{
     position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
   }
+  .file-field .label-text{position:relative; z-index:1; pointer-events:none;}
+  .file-field .label-text [data-name]{pointer-events:all;}
   .file-field .fname{color:var(--gold-soft); font-weight:600;}
 
   fieldset{border:none; padding:0; margin:0 0 20px;}
@@ -283,7 +285,10 @@
 
     <div class="field">
       <label>Partnerzugriff über Meta Business Suite</label>
-      <input type="text" name="Partnerzugriff" placeholder="ESR Studio wird als Partner hinzugefügt" required>
+      <label class="radio-opt" style="margin-top:6px;">
+        <input type="checkbox" name="Partnerzugriff" value="Eingerichtet" required style="accent-color:var(--gold); width:16px; height:16px; cursor:pointer;">
+        Ich habe den Partnerzugriff eingerichtet
+      </label>
       <span class="hint">Kein Passwort nötig — Zugriff läuft über Meta Business Suite als Partner. Sie können ihn jederzeit selbst entziehen.</span>
       <a href="anleitung.html" class="guide-link">Schritt-für-Schritt Anleitung →</a>
     </div>
@@ -303,13 +308,16 @@
       <label>Logo Datei</label>
       <div class="file-field">
         <span class="label-text">Datei auswählen (Vektor bevorzugt: AI, EPS, SVG)</span>
-        <input type="file" name="Logo">
+        <input type="file" name="Logo" multiple>
       </div>
     </div>
 
     <div class="field">
-      <label for="brand_colors">Markenfarben / CI Vorgaben (falls vorhanden)</label>
-      <input type="text" id="brand_colors" name="Markenfarben">
+      <label>Markenfarben / CI Vorgaben (falls vorhanden)</label>
+      <div class="file-field">
+        <span class="label-text">Datei auswählen (PDF, PNG, AI, Brand Guidelines…)</span>
+        <input type="file" name="Markenfarben CI" accept=".pdf,.png,.jpg,.jpeg,.ai,.eps,.svg,.zip" multiple>
+      </div>
     </div>
 
     <div class="field">
@@ -334,7 +342,7 @@
     <h2 class="section-title">Ansprechpartner</h2>
 
     <div class="field">
-      <label for="contact_name">Ansprechpartner für Content Freigabe</label>
+      <label for="contact_name">Ansprechpartner für Contentfreigabe und Planung</label>
       <input type="text" id="contact_name" name="Ansprechpartner Name" required>
       <span class="hint">Bitte eine Person benennen — beschleunigt die Abstimmung spürbar.</span>
     </div>
@@ -430,6 +438,51 @@
 <footer>ESR Studio — Video Content, der Ihre Zielgruppe erreicht</footer>
 
 <script>
+  document.querySelectorAll('.file-field input[type=file]').forEach(function(input){
+    const wrapper = input.closest('.file-field');
+    const label = wrapper.querySelector('.label-text');
+    label.dataset.default = label.textContent;
+    let accumulated = [];
+
+    function renderList(){
+      if(accumulated.length === 0){
+        label.textContent = label.dataset.default;
+        return;
+      }
+      label.innerHTML = accumulated.map(function(f){
+        return '<span class="fname" style="display:flex;align-items:center;gap:8px;margin-top:5px;">'
+          + '&#x2022; ' + f.name
+          + '<span data-name="' + f.name + '" style="position:relative;z-index:2;cursor:pointer;font-size:11px;opacity:0.55;flex-shrink:0;padding:2px 4px;" title="Entfernen">✕</span>'
+          + '</span>';
+      }).join('');
+
+      label.querySelectorAll('[data-name]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          accumulated = accumulated.filter(function(f){ return f.name !== btn.dataset.name; });
+          syncInput();
+          renderList();
+        });
+      });
+    }
+
+    function syncInput(){
+      const dt = new DataTransfer();
+      accumulated.forEach(function(f){ dt.items.add(f); });
+      input.files = dt.files;
+    }
+
+    input.addEventListener('change', function(){
+      Array.from(this.files).forEach(function(f){
+        if(!accumulated.find(function(e){ return e.name === f.name; })){
+          accumulated.push(f);
+        }
+      });
+      syncInput();
+      renderList();
+    });
+  });
+
   const form = document.getElementById('onboarding-form');
   const btn = document.getElementById('submit-btn');
   const errorMsg = document.getElementById('error-msg');
