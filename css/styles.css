@@ -1549,9 +1549,11 @@ p {
   --sq-ratio:    1.7778; /* 16:9 */
   /* Untergrenze: auf dem Handy so flach, dass das offene Panel fast
      16:9 bleibt, statt links und rechts viel abzuschneiden */
-  --sq-h:        clamp(min(180px, calc((100cqi - 92px) * 0.6)), 34cqi, 420px);
+  /* Platz rechts vom offenen Video für Nachbarn, Lamellen und Abstände */
+  --sq-rest:     92px;
+  --sq-h:        clamp(min(180px, calc((100cqi - var(--sq-rest)) * 0.6)), 34cqi, 420px);
   /* Offenes Panel: Block im Videoformat, auf schmalen Bildschirmen schmaler */
-  --sq-hero:     min(calc(var(--sq-h) * var(--sq-ratio)), calc(100cqi - 92px));
+  --sq-hero:     min(calc(var(--sq-h) * var(--sq-ratio)), calc(100cqi - var(--sq-rest)));
   /* Breite der vier Spalten zusammen (ohne Lamellen und Abstände) */
   --sq-avail:    calc(100cqi
                  - var(--sq-slats, 1) * (var(--sq-slat-gap) + var(--sq-slat))
@@ -1574,8 +1576,33 @@ p {
   /* svh: ohne die ein-/ausfahrende Adressleiste mobiler Browser */
   .sq--portrait .sq__inner { --sq-h: min(clamp(420px, 89cqi, 640px), 80svh, calc(100svh - var(--nav-height) - 32px)); }
 }
+/* Handy: Das offene Video nimmt fast die ganze Breite ein, die Nachbarn
+   schauen nur noch als schmale Streifen hinein. Feinere Lamellen und
+   Abstände, damit dafür Platz bleibt. */
 @container (max-width: 600px) {
-  .sq__inner { --sq-gap: 8px; }
+  .sq__inner {
+    --sq-rest:     60px;
+    --sq-gap:      6px;
+    --sq-slat:     4px;
+    --sq-slat-gap: 4px;
+    --sq-h:        calc((100cqi - var(--sq-rest)) * 0.6);
+  }
+  /* Hochformat: so hoch wie die Breite erlaubt, aber Navigation und
+     Schaltflächen bleiben darüber im Bild */
+  .sq--portrait .sq__inner {
+    --sq-h: min(calc((100cqi - var(--sq-rest)) * 1.7778), 78vh, calc(100vh - var(--nav-height) - 76px));
+  }
+  @supports (height: 1svh) {
+    .sq--portrait .sq__inner {
+      --sq-h: min(calc((100cqi - var(--sq-rest)) * 1.7778), 78svh, calc(100svh - var(--nav-height) - 76px));
+    }
+  }
+}
+/* Handy: Karussell läuft rechts bis an den Bildschirmrand, Text und
+   Schaltflächen bleiben auf der Satzkante */
+@media (max-width: 600px) {
+  .sq { margin-right: calc(-1 * var(--gutter)); }
+  .sq__controls, .sq__panel { padding-right: var(--gutter); }
 }
 
 .sq__controls {
