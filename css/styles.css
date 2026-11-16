@@ -315,11 +315,18 @@ p {
 .nav__toggle {
   display: none;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
+  /* 44×44 Tippfläche, das Symbol bleibt optisch am rechten Rand */
+  width: 44px;
+  height: 44px;
+  margin-right: -11px;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   background: none;
   border: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav__toggle span {
@@ -376,8 +383,14 @@ p {
 
 .nav__mobile-close {
   position: absolute;
-  top: 24px;
-  right: var(--gutter);
+  top: 12px;
+  right: calc(var(--gutter) - 12px);
+  /* 44×44 Tippfläche */
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   background: none;
   border: none;
   color: rgba(255,255,255,.5);
@@ -924,6 +937,18 @@ p {
 }
 .footer__nav-link:hover { color: var(--gold); }
 
+/* Touch: größere Tippflächen im Footer, optisch gleicher Abstand */
+@media (pointer: coarse) {
+  .footer__nav-link,
+  .footer__instagram {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .footer__nav { row-gap: 0 !important; }
+  .footer__instagram { margin-top: 2px; }
+}
+
 .footer__divider {
   height: 1px;
   background: rgba(255,255,255,.07);
@@ -993,6 +1018,7 @@ p {
 .legal-content a {
   color: var(--gold);
   text-decoration: underline;
+  overflow-wrap: anywhere; /* lange URLs umbrechen statt seitlich überstehen */
 }
 
 .legal-content ul {
@@ -1361,6 +1387,9 @@ p {
   margin-bottom: 20px;
 }
 
+.form-error-global a { color: inherit; text-decoration: underline; }
+.form-success h3:focus { outline: none; } /* Fokus nur für Screenreader */
+
 .form-success {
   text-align: center;
   padding: 48px 24px;
@@ -1480,9 +1509,10 @@ p {
   aspect-ratio: 21 / 9;
 }
 
-/* Portrait-row grid: alle 4 Videos nebeneinander in 9:16 */
+/* Portrait-row grid: alle Videos nebeneinander in 9:16 (Fallback ohne JS,
+   sonst wird daraus das Squeeze-Karussell) */
 .work-grid--portrait-row {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 }
 /* Cancel the "first card spans full width" rule from base .work-grid */
 .work-grid--portrait-row .work-card:first-child {
@@ -1496,6 +1526,213 @@ p {
 /* Stack grids with minimal gap */
 .work-grid + .work-grid {
   margin-top: 3px;
+}
+
+/* ===========================
+   Squeeze-Karussell (js/squeeze-carousel.js)
+   =========================== */
+.sq {
+  container-type: inline-size;
+}
+.sq + .sq {
+  margin-top: clamp(48px, 7vw, 88px);
+}
+
+/* Variablen auf dem inneren Element, damit 100cqi die Breite von .sq meint */
+.sq__inner {
+  --sq-slat:     8px;
+  --sq-slat-gap: 8px;
+  --sq-gap:      16px;
+  --sq-radius:   3px;
+  --sq-ms:       1000ms;
+  --sq-ease:     cubic-bezier(0.16, 1, 0.3, 1); /* easeOutExpo */
+  --sq-ratio:    1.7778; /* 16:9 */
+  /* Untergrenze: auf dem Handy so flach, dass das offene Panel fast
+     16:9 bleibt, statt links und rechts viel abzuschneiden */
+  --sq-h:        clamp(min(180px, calc((100cqi - 92px) * 0.6)), 34cqi, 420px);
+  /* Offenes Panel: Block im Videoformat, auf schmalen Bildschirmen schmaler */
+  --sq-hero:     min(calc(var(--sq-h) * var(--sq-ratio)), calc(100cqi - 92px));
+  /* Breite der vier Spalten zusammen (ohne Lamellen und Abstände) */
+  --sq-avail:    calc(100cqi
+                 - var(--sq-slats, 1) * (var(--sq-slat-gap) + var(--sq-slat))
+                 - 3 * var(--sq-gap));
+  --sq-room:     calc(var(--sq-avail) - var(--sq-hero));
+  --sq-open-min: 0px;
+  display: flex;
+  flex-direction: column;
+}
+/* Hochformat (9:16): höher, damit das offene Video groß genug ist,
+   aber nie höher als der Bildschirm */
+.sq--portrait .sq__inner {
+  --sq-ratio: 0.5625;
+  /* nie höher als der Bildschirm unter der festen Navigation */
+  --sq-h:     min(clamp(420px, 89cqi, 640px), 80vh, calc(100vh - var(--nav-height) - 32px));
+  /* Bei wenig Höhe (Handy quer) bleibt das offene Panel trotzdem das größte */
+  --sq-open-min: calc(var(--sq-avail) * 0.38);
+}
+@supports (height: 1svh) {
+  /* svh: ohne die ein-/ausfahrende Adressleiste mobiler Browser */
+  .sq--portrait .sq__inner { --sq-h: min(clamp(420px, 89cqi, 640px), 80svh, calc(100svh - var(--nav-height) - 32px)); }
+}
+@container (max-width: 600px) {
+  .sq__inner { --sq-gap: 8px; }
+}
+
+.sq__controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.sq__btn {
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+  transition: border-color .3s var(--ease), color .3s var(--ease);
+}
+@media (hover: hover) {
+  .sq__btn:hover { border-color: var(--gold); color: var(--gold); }
+}
+/* Touch: Schaltflächen mindestens 44 px */
+@media (pointer: coarse) {
+  .sq__btn { width: 44px; height: 44px; }
+}
+.sq__btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+.sq__btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.sq__viewport {
+  height: var(--sq-h);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.sq__strip {
+  display: flex;
+  height: 100%;
+  width: max-content;
+}
+
+.sq__card {
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--pine);
+  cursor: pointer;
+  transition-property: width, margin-left;
+  transition-duration: var(--sq-ms);
+  transition-timing-function: var(--sq-ease);
+}
+.sq__card:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+
+/* Immer als 16:9-Block gezeichnet und zentriert: Das Panel ändert nur,
+   wie viel man sieht, nie den Maßstab des Videos. */
+.sq__media {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--sq-hero);
+  min-width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: brightness(.6);
+  transition: filter .6s var(--ease);
+}
+.sq__card.is-front .sq__media { filter: none; }
+@media (hover: hover) {
+  .sq__card:hover .sq__media { filter: none; }
+}
+
+.sq__overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 64px 16px 16px;
+  background-image: linear-gradient(to top, rgb(0 0 0 / .55), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sq-ms) var(--sq-ease);
+}
+.sq__card.is-front .sq__overlay { opacity: 1; }
+.sq__tag {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.sq__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding-left: 3px;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 50%;
+  background: rgba(13,36,26,.35);
+  color: var(--white);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s var(--ease);
+}
+.sq.is-paused .sq__card.is-front .sq__play { opacity: 1; }
+
+.sq__panel {
+  display: grid;
+  margin-top: 24px;
+}
+.sq__copy {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--sq-ms) var(--sq-ease), visibility var(--sq-ms);
+}
+.sq__copy.is-shown { opacity: 1; visibility: visible; pointer-events: auto; }
+.sq__text {
+  max-width: 46rem;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  text-wrap: balance;
+  color: rgba(255,255,255,.5);
+}
+.sq__title { color: var(--white); }
+
+@container (min-width: 640px) {
+  .sq__overlay { padding: 80px 24px 24px; }
+  .sq__panel { margin-top: 28px; }
+  .sq__text { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq__inner { --sq-ms: 0ms; }
 }
 
 /* ===========================
@@ -1563,23 +1800,19 @@ p {
 }
 
 /* ===========================
-   Scroll Reveal
+   Scroll Reveal (js/scroll-reveal.js)
    =========================== */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity .75s var(--ease), transform .75s var(--ease);
+/* Scroll-Einblendung: ohne JS bleibt alles sichtbar */
+[data-reveal-state="pending"] { opacity: 0; }
+[data-reveal-state="pending"] [data-reveal-token],
+[data-reveal-state="running"] [data-reveal-token] {
+  display: inline-block; max-width: 100%; overflow-wrap: anywhere;
 }
-
-.reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
+@media (prefers-reduced-motion: reduce), print {
+  [data-reveal], [data-reveal-token] {
+    opacity: 1 !important; filter: none !important; transform: none !important;
+  }
 }
-
-.reveal-d1 { transition-delay: .08s; }
-.reveal-d2 { transition-delay: .17s; }
-.reveal-d3 { transition-delay: .26s; }
-.reveal-d4 { transition-delay: .35s; }
 
 /* Hero entrance */
 .hero-enter {
@@ -1751,15 +1984,6 @@ p {
    Reduced Motion
    =========================== */
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .reveal.in-view {
-    opacity: 1;
-    transform: none;
-  }
   .hero-enter {
     opacity: 1;
     transform: none;

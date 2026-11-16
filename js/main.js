@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initMobileMenu();
-  initScrollReveal();
   setActiveNavLink();
   initContactForm();
   initWorkVideos();
@@ -79,25 +78,6 @@ function initMobileMenu() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') close();
   });
-}
-
-// ===========================
-// Scroll Reveal
-// ===========================
-function initScrollReveal() {
-  const els = document.querySelectorAll('.reveal');
-  if (!els.length) return;
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
-
-  els.forEach(el => io.observe(el));
 }
 
 // ===========================
@@ -240,10 +220,74 @@ function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
 
+  const btn = form.querySelector('.btn--form');
+  const btnHTML = btn ? btn.innerHTML : '';   // inkl. goldenem Punkt
+
+  // Prüfregeln: leerer String = in Ordnung, sonst der Hinweis
+  const rules = {
+    name:    v => v ? '' : 'Bitte gib deinen Namen ein.',
+    email:   v => !v ? 'Bitte gib deine E-Mail-Adresse ein.'
+               : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : 'Bitte gib eine gültige E-Mail-Adresse ein.',
+    message: v => v ? '' : 'Bitte schreib kurz, worum es geht.',
+  };
+
+  function check(field) {
+    const rule = rules[field.name];
+    if (!rule) return true;
+    const msg = rule(field.value.trim());
+    const out = form.querySelector(`[data-fs-error="${field.name}"]`);
+    if (out) {
+      if (!out.id) out.id = `${field.name}-error`;
+      out.textContent = msg;
+      field.setAttribute('aria-describedby', out.id);
+    }
+    if (msg) field.setAttribute('aria-invalid', 'true');
+    else field.removeAttribute('aria-invalid');
+    return !msg;
+  }
+
+  // Hinweis erst nach dem ersten Verlassen eines ausgefüllten Felds,
+  // danach live verschwinden lassen, sobald es passt
+  Object.keys(rules).forEach(name => {
+    const field = form.elements[name];
+    if (!field) return;
+    field.addEventListener('blur', () => { if (field.value.trim()) check(field); });
+    field.addEventListener('input', () => { if (field.hasAttribute('aria-invalid')) check(field); });
+  });
+
+  // Fehlermeldung im Formular statt Popup
+  function showError(text) {
+    let box = form.querySelector('.form-error-global');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'form-error-global';
+      box.setAttribute('role', 'alert');
+      form.insertBefore(box, form.querySelector('.form-submit'));
+    }
+    box.innerHTML = `${text} Bitte schreib direkt an <a href="mailto:info@esrstudio.de">info@esrstudio.de</a>.`;
+  }
+  function clearError() {
+    const box = form.querySelector('.form-error-global');
+    if (box) box.remove();
+  }
+  function resetButton() {
+    if (!btn) return;
+    btn.innerHTML = btnHTML;
+    btn.disabled = false;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearError();
 
-    const btn = form.querySelector('.btn--form');
+    const invalid = Object.keys(rules)
+      .map(name => form.elements[name])
+      .filter(field => field && !check(field));
+    if (invalid.length) {
+      invalid[0].focus();
+      return;
+    }
+
     if (btn) {
       btn.textContent = 'Senden…';
       btn.disabled = true;
@@ -260,29 +304,27 @@ function initContactForm() {
       if (response.ok) {
         if (wrap) {
           wrap.innerHTML = `
-            <div class="form-success">
+            <div class="form-success" role="status">
               <div class="form-success__icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                   <path d="M4 10L8.5 14.5L16 6" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <h3>Nachricht erhalten.</h3>
+              <h3 tabindex="-1">Nachricht erhalten.</h3>
               <p>Danke für deine Anfrage. Ich melde mich innerhalb von 1–2 Werktagen.</p>
             </div>`;
+          const heading = wrap.querySelector('h3');
+          if (heading) heading.focus({ preventScroll: true });
+          const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          wrap.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'center' });
         }
       } else {
-        if (btn) {
-          btn.textContent = 'Nachricht senden';
-          btn.disabled = false;
-        }
-        alert('Etwas ist schiefgelaufen. Bitte schreib direkt an info@esrstudio.de');
+        resetButton();
+        showError('Etwas ist schiefgelaufen.');
       }
     } catch {
-      if (btn) {
-        btn.textContent = 'Nachricht senden';
-        btn.disabled = false;
-      }
-      alert('Keine Verbindung. Bitte schreib direkt an info@esrstudio.de');
+      resetButton();
+      showError('Keine Verbindung.');
     }
   });
 }
