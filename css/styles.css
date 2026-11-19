@@ -1266,6 +1266,7 @@ p {
   font-weight: 500;
   color: var(--pine);
 }
+address.contact-detail__value { font-style: normal; }
 
 .contact-form-wrap {
   background: var(--white);

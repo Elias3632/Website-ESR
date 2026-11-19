@@ -84,12 +84,12 @@ function initMobileMenu() {
 // Active Nav Link
 // ===========================
 function setActiveNavLink() {
-  const page = window.location.pathname.split('/').pop() || 'index.html';
+  /* /about, /about.html und about.html meinen dieselbe Seite */
+  const norm = p => '/' + (p.split(/[?#]/)[0].split('/').pop() || '').replace(/\.html$/, '').replace(/^index$/, '');
+  const page = norm(window.location.pathname);
 
   document.querySelectorAll('.nav__link').forEach(link => {
-    const href = link.getAttribute('href');
-    const isHome = (page === '' || page === 'index.html') && (href === 'index.html' || href === './');
-    if (href === page || isHome) {
+    if (norm(link.getAttribute('href')) === page) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
