@@ -4,3 +4,6 @@ Video/Elias_Abschlussfilm Privat Kopie.mp4
 
 # Rohdateien (MOV) nie hochladen – nur die komprimierten MP4 werden genutzt
 Video/*.mov
+
+# Hilfsscripte (z. B. IndexNow) nicht mit ausliefern
+tools/
